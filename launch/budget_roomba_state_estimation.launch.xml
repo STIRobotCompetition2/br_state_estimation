@@ -3,4 +3,5 @@
     </include>
     <include file="$(find-pkg-share br_state_estimation)/launch/cartographer.launch.xml">
     </include>
+    <node name="arena_to_map_estimator_node" pkg="br_state_estimation" exec="arena_to_map_estimator"/>
 </launch>

@@ -1,6 +1,6 @@
 
 <launch>
-  <arg name="sim" default="true"/>
+  <arg name="sim" default="false"/>
 
   <node name="cartographer_node" pkg="cartographer_ros"
       exec="cartographer_node" args="
@@ -10,7 +10,7 @@
       output="screen">
     <remap from="scan" to="/lidar/scan" />
     <remap from="imu" to="/imu/data" />
-    <remap from="odom" to="/odom" />
+    <remap from="odom" to="/odometry/filtered" />
     <param name="use_sim_time" value="$(var sim)" />
 
 

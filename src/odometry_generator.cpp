@@ -26,26 +26,26 @@ class OdometryConverter : public rclcpp::Node
         this->last_twist_ = *msg;
     }
     void odomPubTimerCallback(){
-        geometry_msgs::msg::TransformStamped tf_result;
-        try{
-            tf_result = tf_buffer_->lookupTransform("odom", "base_link", tf2::TimePoint(0ms));
-        }
-        catch (tf2::TransformException & ex) {
-            RCLCPP_WARN_SKIPFIRST_THROTTLE(
-                get_logger(), *get_clock(), (5000ms).count(),
-                "cannot get map to base_link transform. %s", ex.what());
-            return;
-        }
+        // geometry_msgs::msg::TransformStamped tf_result;
+        // try{
+        //     tf_result = tf_buffer_->lookupTransform("odom", "base_link", tf2::TimePoint(0ms));
+        // }
+        // catch (tf2::TransformException & ex) {
+        //     RCLCPP_WARN_SKIPFIRST_THROTTLE(
+        //         get_logger(), *get_clock(), (5000ms).count(),
+        //         "cannot get map to base_link transform. %s", ex.what());
+        //     return;
+        // }
         
         nav_msgs::msg::Odometry out_msg;
         out_msg.twist.twist = this->last_twist_;
-        out_msg.pose.pose.position.x = tf_result.transform.translation.x;
-        out_msg.pose.pose.position.y = tf_result.transform.translation.y;
-        out_msg.pose.pose.position.z = tf_result.transform.translation.z;
-        out_msg.pose.pose.orientation = tf_result.transform.rotation;
-        out_msg.header.stamp = tf_result.header.stamp;
-        out_msg.header.frame_id = tf_result.header.frame_id;
-        out_msg.child_frame_id = tf_result.child_frame_id;
+        // out_msg.pose.pose.position.x = tf_result.transform.translation.x;
+        // out_msg.pose.pose.position.y = tf_result.transform.translation.y;
+        // out_msg.pose.pose.position.z = tf_result.transform.translation.z;
+        // out_msg.pose.pose.orientation = tf_result.transform.rotation;
+        out_msg.header.stamp = this->get_clock()->now();
+        out_msg.header.frame_id = "odom";
+        out_msg.child_frame_id = "base_link";
         for(size_t i = 0; i < 36; i += 7) out_msg.twist.covariance[i] = 0.05;
         for(size_t i = 0; i < 36; i += 7) out_msg.pose.covariance[i] = 0.1;
 
